@@ -8,10 +8,10 @@ End-to-end F1 data analytics platform with ETL pipelines, ML predictions, and in
 
 | Person | Role | Work On |
 |--------|------|---------|
-| **Person A** | ETL Engineer | `etl/` folder |
-| **Person B** | Data Scientist | `ml/` folder |
-| **Person C, D** | Frontend Developers | `web/` folder |
-| **Person E** | Backend Developer | `web/` folder |
+| **Hans** | ETL Engineer | `etl/` folder |
+| **Kunj** | Data Scientist | `ml/` folder |
+| **Yvana & Celine** | Frontend Developers | `web/` folder |
+| **Xander** | Backend Developer | `web/` folder |
 
 ---
 
