@@ -1,0 +1,23 @@
+﻿# Docker Compose Configuration
+# This file will orchestrate all ApexF1 services
+
+version: '3.8'
+
+services:
+  # ETL service will be added here
+  # etl:
+  #   build: ./etl
+  #   environment:
+  #     - SUPABASE_URL=${SUPABASE_URL}
+  #     - SUPABASE_KEY=${SUPABASE_KEY}
+  
+  # Web application will be added here
+  # web:
+  #   build: ./web
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NEXT_PUBLIC_SUPABASE_URL=${SUPABASE_URL}
+  #     - NEXT_PUBLIC_SUPABASE_ANON_KEY=${SUPABASE_KEY}
+
+# Networks and volumes will be configured as needed
