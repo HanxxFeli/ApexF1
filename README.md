@@ -35,7 +35,7 @@ git pull
 
 ## 💻 Setup Your Environment
 
-### For Person A (ETL - Python)
+### For Hans (ETL - Python)
 ```bash
 cd etl
 
@@ -61,7 +61,7 @@ python src/your_script.py
 
 ---
 
-### For Person B (ML - Python)
+### For Kunj (ML - Python)
 ```bash
 cd ml
 
@@ -86,7 +86,7 @@ jupyter notebook
 
 ---
 
-### For Persons C, D, E (Web - Next.js)
+### For Persons Yvana, Celine & Xander (Web - Next.js)
 ```bash
 cd web
 
