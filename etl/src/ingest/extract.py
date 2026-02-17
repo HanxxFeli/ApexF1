@@ -4,9 +4,6 @@
 from pathlib import Path 
 import pandas as pd 
 
-# raw CSV folder
-raw_path = Path("etl/data/raw")
-
 # store the different dataframes into 1 dictionary
 dataframes = {}
 encodings_to_try = ["utf-8", "latin-1", "cp1252"]
@@ -26,7 +23,7 @@ for file_path in csv_files:
             dataframes[file_path.stem] = df
             print(f"Loaded {file_path.stem} into dataframe successfully with encoding {enc}")
             break
-        
+
         except UnicodeDecodeError: 
             continue
 
