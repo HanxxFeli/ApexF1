@@ -23,11 +23,9 @@ build/
 .env.*.local
 
 # Data files
-*.csv
 *.parquet
 *.pkl
 *.h5
-data/
 
 # IDE
 .vscode/
