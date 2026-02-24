@@ -1,318 +1,340 @@
-# ApexF1 - Formula 1 Data Analytics Platform
+# ApexF1 — Formula 1 Race Prediction & Analytics Platform
 
-End-to-end F1 data analytics platform with ETL pipelines, ML predictions, and interactive dashboards.
+An end-to-end Formula 1 analytics platform that processes 10 years of F1 race data (40,000+ records), applies machine learning to predict race outcomes, and surfaces insights through an interactive dashboard.
+
+**Stack:** Python · pandas · Supabase (PostgreSQL) · Docker · scikit-learn · Next.js · TypeScript · Tailwind CSS
 
 ---
 
 ## 👥 Team
 
-| Person | Role | Work On |
-|--------|------|---------|
-| **Hans** | Data Engineer | ``etl/`` folder |
-| **Kunj** | Data Scientist | ``ml/`` folder |
-| **Yvana & Celine** | Frontend Developers | ``web/`` folder |
-| **Xander** | Backend Developer | ``web/`` folder |
+| Person | Role | Folder |
+|--------|------|--------|
+| **Hans** | Data Engineer | `etl/` |
+| **Kunj** | Data Scientist | `ml/` |
+| **Yvana & Celine** | Frontend Developers | `web/` |
+| **Xander** | Backend Developer | `web/` |
+
+---
+
+## 🏗️ Architecture
+
+```
+Raw F1 CSV Data (Kaggle)
+        │
+        ▼
+┌───────────────────┐
+│   ETL Pipeline    │  Python · pandas · Docker
+│  Extract          │  Reads 9 CSV files from disk
+│  Transform        │  Cleans, filters, reshapes data
+│  Load             │  Upserts into Supabase
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│     Supabase      │  PostgreSQL · REST API
+│    (8 tables)     │
+└────────┬──────────┘
+         │
+    ┌────┴─────┐
+    ▼          ▼
+┌───────┐  ┌──────────────┐
+│  ML   │  │  Next.js     │
+│ Model │  │  Dashboard   │
+└───────┘  └──────────────┘
+```
+
+---
+
+## 📁 Project Structure
+
+```
+apexf1/
+├── .env                    # Credentials - never commit this
+├── .env.example            # Template for credentials
+├── .gitignore
+├── docker-compose.yml      # Orchestrates all services
+├── etl/                    # Data Engineering (Hans) ✅ Complete
+│   ├── Dockerfile
+│   ├── run_etl.py
+│   ├── requirements.txt
+│   ├── data/
+│   │   └── raw/f1/         # Raw Kaggle CSV files
+│   └── src/
+│       ├── __init__.py
+│       ├── extract/        # Reads CSVs into DataFrames
+│       ├── transform/      # Cleans and filters data
+│       └── load/           # Upserts into Supabase
+├── ml/                     # Machine Learning (Kunj) 🚧 In Progress
+│   ├── src/
+│   ├── notebooks/
+│   └── models/
+└── web/                    # Next.js Dashboard (Yvana, Celine, Xander) 🚧 In Progress
+    ├── src/
+    └── public/
+```
 
 ---
 
 ## 🚀 Getting Started
 
+### Prerequisites
+
+- Python 3.12+
+- Node.js 18+
+- Docker Desktop
+- Supabase project access (ask Hans for credentials)
+
 ### 1. Clone the Repository
-``````bash
+
+```bash
 git clone https://github.com/hanxxfeli/ApexF1.git
 cd apexf1
-``````
+```
 
 ### 2. Switch to Develop Branch
-``````bash
+
+```bash
 git checkout develop
 git pull
-``````
+```
 
-**⚠️ Always work from ``develop``, never directly on ``main``**
+> ⚠️ Always work from `develop`, never directly on `main`
+
+### 3. Set Up Credentials
+
+```bash
+cp .env.example .env
+```
+
+Fill in your Supabase credentials in `.env`:
+
+```
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-service-role-key
+```
 
 ---
 
-## 💻 Setup Your Environment
+## 💻 Service Setup
 
-### For Hans (ETL - Python)
-``````bash
+### ✅ ETL Pipeline (Hans)
+
+A modular, containerised Python ETL pipeline that extracts raw F1 data, applies table-specific cleaning and validation, and loads 8 normalised tables into Supabase via upsert — making it safe to re-run after every new race.
+
+```bash
 cd etl
 
-# Create virtual environment
+# Create and activate virtual environment
 python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # Mac/Linux
 
-# Activate it (do this EVERY TIME you work)
-venv\Scripts\activate
+# Install dependencies
+pip install -r requirements.txt
 
-# Install core libraries
-pip install pandas sqlalchemy python-dotenv supabase
+# Run the full pipeline
+python run_etl.py
+```
 
-# Save dependencies
-pip freeze > requirements.txt
+**Run with Docker:**
 
-# Create environment file
-copy ..\.env.example .env
-# Edit .env with your Supabase credentials
-``````
+```bash
+cd etl
+docker build -t apexf1-etl .
+docker run --env-file ../.env apexf1-etl
+```
 
-**Libraries you'll use:**
-- ``pandas`` - Data manipulation
-- ``sqlalchemy`` - Database connections
-- ``python-dotenv`` - Environment variables
-- ``supabase`` - Supabase client
-- Additional: ``requests``, ``pytest`` (for testing)
+**Tables loaded into Supabase:**
 
-**Run ETL:**
-``````bash
-venv\Scripts\activate
-python src/your_script.py
-``````
+| Table | Rows | Description |
+|-------|------|-------------|
+| `circuits` | 76 | Circuit locations and coordinates |
+| `constructors` | 168 | Team reference data |
+| `constructor_standings` | 111 | Championship standings per season |
+| `drivers` | 616 | Driver reference data |
+| `driver_standings` | 244 | Driver standings per season |
+| `qualifying` | 1,100 | Q1/Q2/Q3 lap times (2015–2025) |
+| `races` | 233 | Race calendar (2015–2025) |
+| `results` | 1,100 | Race results and points (2015–2025) |
+
+**Key technical decisions:**
+- Encoding fallback strategy (UTF-8 → Latin-1 → CP1252) handles accented circuit names
+- Upsert loading pattern ensures idempotent runs — safe to re-run after every new race
+- Automated null and duplicate validation logs data quality on every run
+- Modular architecture (one function per table) keeps transforms isolated and testable
 
 ---
 
-### For Kunj (ML - Python)
-``````bash
+### 🚧 ML Models (Kunj)
+
+> In progress — predicting top-10 race finishes using XGBoost and Random Forest
+
+```bash
 cd ml
 
-# Create virtual environment
 python -m venv venv
-
-# Activate it (do this EVERY TIME you work)
 venv\Scripts\activate
+pip install -r requirements.txt
 
-# Install ML libraries
-pip install pandas numpy scikit-learn jupyter supabase python-dotenv matplotlib seaborn
-
-# Save dependencies
-pip freeze > requirements.txt
-
-# Create environment file
-copy ..\.env.example .env
-# Edit .env with your Supabase credentials
-``````
-
-**Libraries you'll use:**
-- ``pandas`` - Data manipulation
-- ``numpy`` - Numerical operations
-- ``scikit-learn`` - Machine learning models
-- ``jupyter`` - Jupyter notebooks
-- ``matplotlib`` & ``seaborn`` - Data visualization
-- ``supabase`` - Database connection
-- Additional: ``xgboost``, ``lightgbm`` (advanced models)
-
-**Run Jupyter:**
-``````bash
-venv\Scripts\activate
+# Run Jupyter notebooks
 jupyter notebook
-``````
 
-**Train models:**
-``````bash
-venv\Scripts\activate
+# Train models
 python src/train_model.py
-``````
+```
+
+**Libraries:** pandas · numpy · scikit-learn · xgboost · lightgbm · matplotlib · seaborn · supabase
 
 ---
 
-### For Yvana, Celine & Xander (Web - Next.js)
+### 🚧 Web Dashboard (Yvana, Celine & Xander)
 
-#### First Time Setup:
-``````bash
+> In progress — Next.js/TypeScript dashboard visualising race trends and ML predictions
+
+```bash
 cd web
-
-# Initialize Next.js project (ONLY ONCE - probably already done)
-npx create-next-app@latest . --typescript --tailwind --app --no-src-dir
-
-# When prompted, choose:
-# ✔ Would you like to use ESLint? … Yes
-# ✔ Would you like to use Turbopack? … No
-# ✔ Would you like to customize the import alias? … No
-``````
-
-#### Install Dependencies:
-``````bash
-# Core dependencies (after Next.js is initialized)
-npm install @supabase/supabase-js recharts clsx tailwind-merge
-
-# Development dependencies
-npm install -D @types/node @types/react
-``````
-
-**Libraries you'll use:**
-- ``@supabase/supabase-js`` - Supabase client for API calls
-- ``recharts`` - Charts and data visualization
-- ``clsx`` & ``tailwind-merge`` - Utility for styling
-- ``lucide-react`` - Icon library (optional)
-
-#### Environment Setup:
-``````bash
-# Create environment file
-copy .env.example .env.local
-# Edit .env.local with:
-# NEXT_PUBLIC_SUPABASE_URL=your_url
-# NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
-``````
-
-**Run dev server:**
-``````bash
+npm install
 npm run dev
-``````
+```
+
 Open [http://localhost:3000](http://localhost:3000)
 
-**Build for production:**
-``````bash
-npm run build
-npm start
-``````
+**Environment setup:**
+
+```bash
+cp .env.example .env.local
+# Add to .env.local:
+# NEXT_PUBLIC_SUPABASE_URL=your_url
+# NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+```
+
+**Libraries:** @supabase/supabase-js · recharts · tailwind · clsx · lucide-react
+
+---
+
+## 🐳 Docker Compose
+
+Once all services are ready, the full platform runs with one command from the project root:
+
+```bash
+docker-compose up           # start all services
+docker-compose up -d        # start in background
+docker-compose up --build   # rebuild after code changes
+docker-compose down         # stop all services
+```
 
 ---
 
 ## 🔄 Git Workflow
 
-### Every Time You Start Working:
-``````bash
-# 1. Get latest code
+### Starting a New Feature
+
+```bash
+# 1. Get the latest code
 git checkout develop
 git pull
 
 # 2. Create your feature branch
 git checkout -b feature/your-feature-name
-# Examples: feature/etl-races, feature/ml-training, feature/frontend-dashboard
+# Examples:
+#   feature/etl-transform
+#   feature/ml-xgboost-model
+#   feature/dashboard-standings-chart
+```
 
-# 3. Work on your code...
+### Committing and Pushing
 
-# 4. Commit your changes
+```bash
 git add .
-git commit -m "Describe what you did"
-
-# 5. Push your branch
+git commit -m "Brief description of what you did"
 git push -u origin feature/your-feature-name
-``````
+```
 
-### Create Pull Request:
+### Creating a Pull Request
 
-1. Go to GitHub
-2. Click "Compare & pull request"
-3. Base should automatically be ``develop`` (if not, change it!)
-4. Add description and create PR
-5. Request review from teammate
-6. After approval, merge
+1. Go to GitHub and click **Compare & pull request**
+2. Confirm the base branch is `develop`
+3. Add a description of your changes
+4. Request a review from a teammate
+5. After approval, merge and delete the branch
 
-### After Your PR is Merged:
-``````bash
+### After Merging
+
+```bash
 git checkout develop
 git pull
-git branch -d feature/your-feature-name  # Delete old branch
-# Start next feature...
-``````
-
----
-
-## 🐳 Docker (Sprint 1 Week 3+)
-
-Once Docker is set up by Xander:
-``````bash
-# Start all services
-docker-compose up
-
-# Start in background
-docker-compose up -d
-
-# Stop services
-docker-compose down
-
-# Rebuild after changes
-docker-compose up --build
-``````
-
----
-
-## 📁 Project Structure
-``````
-apexf1/
-├── etl/              # Hans - ETL pipelines
-│   ├── src/
-│   ├── tests/
-│   ├── venv/        # Not in Git
-│   └── requirements.txt
-├── ml/               # Kunj - ML models
-│   ├── src/
-│   ├── notebooks/
-│   ├── models/
-│   ├── venv/        # Not in Git
-│   └── requirements.txt
-├── web/              # Yvana, Celine, Xander - Next.js
-│   ├── src/
-│   ├── public/
-│   ├── node_modules/  # Not in Git
-│   └── package.json
-└── docs/             # Documentation
-``````
-
----
-
-## 🆘 Quick Troubleshooting
-
-**"Command not found"**: Activate your environment first
-- Python: ``venv\Scripts\activate``
-- Node: ``npm install``
-
-**Git push rejected**: Pull first, then push
-``````bash
-git pull
-git push
-``````
-
-**Module not found**:
-``````bash
-# Python: 
-venv\Scripts\activate
-pip install -r requirements.txt
-
-# Node: 
-npm install
-``````
-
-**Merge conflicts**:
-``````bash
-# Open conflicted files, resolve manually
-# Look for <<<<<<< and >>>>>>>
-git add .
-git commit -m "Resolve merge conflicts"
-git push
-``````
+git branch -d feature/your-feature-name
+```
 
 ---
 
 ## 📦 Installing Additional Libraries
 
-### Python (Hans & Kunj):
-``````bash
+**Python (Hans & Kunj):**
+
+```bash
 venv\Scripts\activate
 pip install package-name
-pip freeze > requirements.txt  # Update requirements file
-``````
+pip freeze > requirements.txt   # always update this after installing
+```
 
-### Node (Yvana, Celine, Xander):
-``````bash
+**Node (Yvana, Celine, Xander):**
+
+```bash
 npm install package-name
 # package.json updates automatically
-``````
+```
 
 ---
 
-## ✅ Important Rules
+## 🆘 Troubleshooting
 
-- ✅ Always branch from ``develop``
-- ✅ Always create PRs to ``develop`` (default is set!)
-- ✅ Activate Python venv EVERY TIME you work
-- ✅ Run ``pip freeze > requirements.txt`` after installing new Python packages
-- ✅ Commit ``package.json`` changes when installing Node packages
-- ❌ Never commit ``.env`` or ``.env.local`` files
-- ❌ Never commit ``venv/`` or ``node_modules/`` folders
-- ❌ Never push directly to ``main`` or ``develop``
+**Virtual environment not activating:**
+```bash
+# Windows - if blocked by execution policy
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+venv\Scripts\activate
+```
+
+**Module not found:**
+```bash
+# Python
+venv\Scripts\activate
+pip install -r requirements.txt
+
+# Node
+npm install
+```
+
+**Git push rejected:**
+```bash
+git pull
+git push
+```
+
+**Merge conflicts:**
+```bash
+# Open conflicted files and look for <<<<<<< and >>>>>>>
+# Resolve manually, then:
+git add .
+git commit -m "Resolve merge conflicts"
+git push
+```
 
 ---
 
-**Questions? Ask in the team chat! 🏁**
+## ✅ Team Rules
+
+- ✅ Always branch from `develop`
+- ✅ Always create PRs to `develop`
+- ✅ Activate Python venv every time you work
+- ✅ Run `pip freeze > requirements.txt` after installing new packages
+- ✅ Commit `package.json` changes when installing Node packages
+- ❌ Never commit `.env` or `.env.local`
+- ❌ Never commit `venv/` or `node_modules/`
+- ❌ Never push directly to `main` or `develop`
+
+---
+
+**Questions? Drop them in the team chat! 🏁**
