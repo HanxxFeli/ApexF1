@@ -18,7 +18,7 @@ from supabase import create_client, Client
 logger = logging.getLogger(__name__)
 
 # read the .env file to add values into os.environ
-env_path = Path(__file__).parent.parent.parent.parent / ".env"
+env_path = Path(__file__).parent.parent.parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
 # Send only 500 rows to Supabase in one API call (avoid payload size limit)
