@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0b0b10;    /* deep near-black */
+  --foreground: #ffffff;    /* primary text */
+
+  /* shared surface colors for cards */
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-border: rgba(255, 255, 255, 0.06);
+
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif);
+
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(239, 68, 68, 0.12), transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.06), transparent 55%);
+  background-attachment: fixed;
+}
