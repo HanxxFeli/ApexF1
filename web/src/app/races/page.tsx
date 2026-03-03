@@ -100,7 +100,7 @@ export default function RacesPage() {
                       <td className="px-5 py-4 text-white/70">{formatDate(r.date)}</td>
                       <td className="px-5 py-4 text-right">
                         <Link
-                          href={`/races/${r.round}?year=${r.year}`}
+                          href={`/races/${r.round}`}
                           className="text-red-400 hover:text-red-300 transition font-medium"
                         >
                           View details →
