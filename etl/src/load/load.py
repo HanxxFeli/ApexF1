@@ -34,6 +34,8 @@ TABLE_PRIMARY_KEYS = {
     "qualifying": ["race_id", "driver_id"],
     "races": ["race_id"],
     "results": ["race_id", "driver_id"],
+    # predictions are unique by race and driver; the serial id is handled by Supabase
+    "predictions": ["race_id", "driver_id"],
 }
 
 
