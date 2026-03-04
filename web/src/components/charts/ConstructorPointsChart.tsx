@@ -9,23 +9,39 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { constructorPoints } from "@/data/mock/dashboard";
+import { useThemeColors } from "@/lib/useThemeColors";
 
 export default function ConstructorPointsChart() {
+  const { text, surface } = useThemeColors();
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={constructorPoints} margin={{ left: 10, right: 10 }}>
         <XAxis
           dataKey="team"
-          tick={{ fill: "rgba(255,255,255,0.35)", fontSize: 10 }}
+          tick={{ fill: text, opacity: 0.55, fontSize: 10 }}
           interval={0}
-          angle={0}
         />
-        <YAxis tick={{ fill: "rgba(255,255,255,0.35)", fontSize: 12 }} />
+
+        <YAxis
+          tick={{ fill: text, opacity: 0.55, fontSize: 12 }}
+        />
+
         <Tooltip
-          contentStyle={{ background: "rgba(0,0,0,0.85)", border: "1px solid rgba(255,255,255,0.1)" }}
-          labelStyle={{ color: "rgba(255,255,255,0.7)" }}
+          contentStyle={{
+            background: surface,
+            border: `1px solid ${text}22`,
+            borderRadius: 10,
+          }}
+          labelStyle={{ color: text }}
+          itemStyle={{ color: text }}
         />
-        <Bar dataKey="points" fill="#9ca3af" radius={[8, 8, 0, 0]} />
+
+        <Bar
+          dataKey="points"
+          fill="#9ca3af"
+          radius={[8, 8, 0, 0]}
+        />
       </BarChart>
     </ResponsiveContainer>
   );

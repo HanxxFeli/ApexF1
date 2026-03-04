@@ -1,14 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0b10;    /* deep near-black */
-  --foreground: #ffffff;    /* primary text */
+  --background: #0b0b10;
+  --foreground: #ffffff;
 
-  /* shared surface colors for cards */
   --surface: rgba(255, 255, 255, 0.04);
   --surface-border: rgba(255, 255, 255, 0.06);
 
   color-scheme: dark;
+}
+
+html:not(.dark) {
+  --background: #ffffff;
+  --foreground: #0b0b10;
+
+  --surface: rgba(0, 0, 0, 0.04);
+  --surface-border: rgba(0, 0, 0, 0.06);
+
+  color-scheme: light;
 }
 
 @theme inline {
@@ -33,4 +42,26 @@ body {
     radial-gradient(circle at 15% 10%, rgba(239, 68, 68, 0.12), transparent 45%),
     radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.06), transparent 55%);
   background-attachment: fixed;
+}
+
+html:not(.dark) body {
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(239, 68, 68, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 30%, rgba(0, 0, 0, 0.04), transparent 55%);
+}
+
+.text-primary {
+  color: var(--foreground);
+}
+.text-muted {
+  color: color-mixed (in srgb, var(--foreground) 70%, transparent);
+}
+.text-dim {
+  color: color-mixed (in srgb, var(--foreground) 40%, transparent);
+}
+.bg-surface {
+  background-color: var(--surface);
+}
+.border-surface {
+  border-color: var(--surface-border);
 }

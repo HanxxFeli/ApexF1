@@ -8,7 +8,7 @@ export default function Card({
   return (
     <div
       className={clsx(
-        "rounded-2xl bg-white/[0.04] backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.35)] border border-white/[0.06]",
+        "rounded-2xl bg-surface border border-surface backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.15)]",
         className
       )}
       {...props}

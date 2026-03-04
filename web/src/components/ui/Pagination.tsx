@@ -14,7 +14,7 @@ export default function Pagination({ page, totalPages, onPageChange }: Props) {
 
   return (
     <div className="flex items-center justify-between gap-3">
-      <p className="text-xs text-white/50">
+      <p className="text-xs text-dim">
         Page {page} of {totalPages}
       </p>
 

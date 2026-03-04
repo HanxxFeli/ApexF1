@@ -67,11 +67,11 @@ export default async function RaceDetailPage({
     <main className="mx-auto max-w-6xl px-5 pb-16">
       <header className="mt-8 flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-white/55">
+          <p className="text-xs uppercase tracking-widest text-dim">
             Race Details
           </p>
           <h1 className="mt-2 text-3xl font-bold tracking-tight">{race.name}</h1>
-          <p className="mt-1 text-sm text-white/55">
+          <p className="mt-1 text-sm text-dim">
             {race.year} • Round {race.round} • {race.country}
           </p>
         </div>
@@ -89,23 +89,23 @@ export default async function RaceDetailPage({
           <p className="text-sm font-semibold">Overview</p>
 
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="rounded-xl bg-white/[0.03] border border-white/10 p-4">
-              <p className="text-xs text-white/55">Date</p>
+            <div className="rounded-xl bg-surface border border-surface p-4">
+              <p className="text-xs text-dim">Date</p>
               <p className="mt-1 text-sm font-medium">{formatDate(race.date)}</p>
             </div>
 
-            <div className="rounded-xl bg-white/[0.03] border border-white/10 p-4">
-              <p className="text-xs text-white/55">Circuit</p>
+            <div className="rounded-xl bg-surface border border-surface p-4">
+              <p className="text-xs text-dim">Circuit</p>
               <p className="mt-1 text-sm font-medium">{race.circuit}</p>
             </div>
 
-            <div className="rounded-xl bg-white/[0.03] border border-white/10 p-4">
-              <p className="text-xs text-white/55">Country</p>
+            <div className="rounded-xl bg-surface border border-surface p-4">
+              <p className="text-xs text-dim">Country</p>
               <p className="mt-1 text-sm font-medium">{race.country}</p>
             </div>
           </div>
 
-          <div className="mt-5 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/60">
+          <div className="mt-5 rounded-xl border border-surface bg-surface p-4 text-sm text-dim">
             Replace these placeholders later with: qualifying table, results
             table, and predictions.
           </div>
@@ -113,15 +113,15 @@ export default async function RaceDetailPage({
 
         <Card className="p-5">
           <p className="text-sm font-semibold">Prediction</p>
-          <p className="mt-2 text-sm text-white/60">Win probability (mock).</p>
+          <p className="mt-2 text-sm text-dim">Win probability (mock).</p>
 
           <div className="mt-4">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-white/70">Red Bull</span>
+              <span className="text-dim">Red Bull</span>
               <span className="font-semibold">69%</span>
             </div>
 
-            <div className="mt-2 h-2 rounded-full bg-white/10 overflow-hidden">
+            <div className="mt-2 h-2 rounded-full bg-surface overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-red-700 via-red-500 to-red-400"
                 style={{ width: "69%" }}

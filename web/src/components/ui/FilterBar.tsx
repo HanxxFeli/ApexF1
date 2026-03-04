@@ -20,7 +20,7 @@ export default function FilterBar({
       <select
         value={season}
         onChange={(e) => onSeasonChange(Number(e.target.value))}
-        className="h-10 rounded-xl bg-white/[0.04] border border-white/10 px-3 text-sm outline-none focus:ring-2 focus:ring-red-500/40"
+        className="h-10 rounded-xl bg-surface border border-surface px-3 text-sm outline-none focus:ring-2 focus:ring-red-500/40"
       >
         {seasons.map((y) => (
           <option key={y} value={y} className="bg-[#0b0b10]">
@@ -33,7 +33,7 @@ export default function FilterBar({
         value={query}
         onChange={(e) => onQueryChange(e.target.value)}
         placeholder="Search races..."
-        className="h-10 w-full sm:w-72 rounded-xl bg-white/[0.04] border border-white/10 px-3 text-sm outline-none focus:ring-2 focus:ring-red-500/40"
+        className="h-10 w-full sm:w-72 rounded-xl bg-surface border border-surface px-3 text-sm outline-none focus:ring-2 focus:ring-red-500/40"
       />
     </div>
   );

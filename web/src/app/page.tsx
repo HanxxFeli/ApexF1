@@ -21,7 +21,7 @@ export default function HomePage() {
             <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
               ApexF1 Analytics Platform
             </h1>
-            <p className="mt-3 text-white/60 text-sm md:text-base max-w-md">
+            <p className="mt-3 text-primary text-sm md:text-base max-w-md">
               Transforming Formula 1 race data into predictive insights.
             </p>
 
@@ -47,7 +47,7 @@ export default function HomePage() {
         <StatCard title="Total Races" value={1149} subtitle="Since 1950" />
         <StatCard title="Active Drivers" value={22} subtitle="Upcoming 2026 season" />
         <StatCard title="Constructors" value={11} subtitle="Current Grid" />
-        <StatCard title="2025 Leader" value="Lando Norris" subtitle="McLaren" highlight />
+        <StatCard title="2025 Leader" value="Lando Norris" subtitle="McLaren" />
       </section>
 
       {/* Charts */}

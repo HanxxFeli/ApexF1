@@ -24,9 +24,12 @@ export default function Button({
   const variants = {
     primary:
       "bg-red-600 hover:bg-red-500 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.06)]",
+    // Theme-safe: border stays red, text adapts to theme
     secondary:
-      "bg-transparent border border-red-500/60 hover:border-red-400 text-red-100 hover:text-white",
-    ghost: "bg-white/0 hover:bg-white/5 text-white/90",
+      "bg-transparent border border-red-500/60 hover:border-red-400 text-[color:var(--foreground)] hover:text-[color:var(--foreground)]",
+    // Theme-safe: subtle surface hover and theme text
+    ghost:
+      "bg-transparent hover:bg-[color:var(--surface)] text-[color:var(--foreground)]",
   };
 
   const sizes = {

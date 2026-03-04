@@ -39,7 +39,7 @@ export default function RacesPage() {
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
 
   React.useEffect(() => {
-    setPage(1); // reset page when filters change
+    setPage(1);
   }, [season, query]);
 
   const pageRows = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -49,7 +49,7 @@ export default function RacesPage() {
       <header className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Races</h1>
-          <p className="mt-1 text-white/55 text-sm">
+          <p className="mt-1 text-dim text-sm">
             Browse the season calendar and open race details.
           </p>
         </div>
@@ -68,17 +68,21 @@ export default function RacesPage() {
           <EmptyState />
         ) : (
           <Card className="p-0 overflow-hidden">
-            <div className="px-5 py-4 border-b border-white/8 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-surface flex items-center justify-between">
               <p className="text-sm font-semibold">{season} Season Calendar</p>
               <div className="w-[220px]">
-                <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+                <Pagination
+                  page={page}
+                  totalPages={totalPages}
+                  onPageChange={setPage}
+                />
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm min-w-[720px]">
-                <thead className="text-white/55">
-                  <tr className="border-b border-white/8">
+                <thead className="text-dim">
+                  <tr className="border-b border-surface">
                     <th className="px-5 py-3 font-medium">Round</th>
                     <th className="px-5 py-3 font-medium">Race</th>
                     <th className="px-5 py-3 font-medium">Circuit</th>
@@ -87,21 +91,22 @@ export default function RacesPage() {
                     <th className="px-5 py-3 font-medium text-right">Action</th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {pageRows.map((r) => (
                     <tr
                       key={`${r.year}-${r.round}`}
-                      className="border-b border-white/5 hover:bg-white/[0.03] transition"
+                      className="border-b border-surface hover:bg-surface transition"
                     >
-                      <td className="px-5 py-4 text-white/80">{r.round}</td>
+                      <td className="px-5 py-4 text-muted">{r.round}</td>
                       <td className="px-5 py-4 font-medium">{r.name}</td>
-                      <td className="px-5 py-4 text-white/70">{r.circuit}</td>
-                      <td className="px-5 py-4 text-white/70">{r.country}</td>
-                      <td className="px-5 py-4 text-white/70">{formatDate(r.date)}</td>
+                      <td className="px-5 py-4 text-muted">{r.circuit}</td>
+                      <td className="px-5 py-4 text-muted">{r.country}</td>
+                      <td className="px-5 py-4 text-muted">{formatDate(r.date)}</td>
                       <td className="px-5 py-4 text-right">
                         <Link
                           href={`/races/${r.round}`}
-                          className="text-red-400 hover:text-red-300 transition font-medium"
+                          className="text-red-500 hover:text-red-400 transition font-medium"
                         >
                           View details →
                         </Link>
@@ -113,7 +118,11 @@ export default function RacesPage() {
             </div>
 
             <div className="px-5 py-4">
-              <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
             </div>
           </Card>
         )}

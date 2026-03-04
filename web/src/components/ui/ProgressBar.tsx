@@ -14,7 +14,7 @@ export default function ProgressBar({ title, label, value }: Props) {
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold">{title}</p>
-          <p className="mt-1 text-xs text-white/50">{label}: {v}%</p>
+          <p className="mt-1 text-xs text-dim">{label}: {v}%</p>
         </div>
         <p className="text-2xl font-semibold">{v}%</p>
       </div>

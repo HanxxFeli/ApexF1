@@ -10,7 +10,7 @@ export default function EmptyState({
   return (
     <Card className="p-6">
       <p className="text-sm font-semibold">{title}</p>
-      <p className="mt-2 text-sm text-white/60">{description}</p>
+      <p className="mt-2 text-sm text-dim">{description}</p>
     </Card>
   );
 }
