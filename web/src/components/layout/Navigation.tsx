@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Search, Menu } from "lucide-react";
 import { righteous } from "../../app/font";
+import ThemeToggle from "../ui/ThemeToggle";
+
 /**
  * Navigation links displayed in the top navigation bar
  * Routes to the main sections of the ApexF1 dashboard
@@ -54,6 +56,8 @@ export default function Navigation() {
 
         {/* Icons */}
         <div className="flex items-center gap-4 text-white/60">
+          <ThemeToggle />
+          
           <button className="group transition-all duration-300">
             <Search
               size={18}
