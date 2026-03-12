@@ -1,9 +1,9 @@
-import Button from "@/components/ui/Button";
-import StatCard from "@/components/ui/StatCard";
-import ChartCard from "@/components/ui/ChartCard";
-import Card from "@/components/ui/Card";
-import ProgressBar from "@/components/ui/ProgressBar";
-import { righteous } from "@/app/font";
+import Button from "../components/ui/Button";
+import StatCard from "../components/ui/StatCard";
+import ChartCard from "../components/ui/ChartCard";
+import Card from "../components/ui/Card";
+import ProgressBar from "../components/ui/ProgressBar";
+import { righteous } from "./font";
 
 /**
  * Home/Dashboard Page
