@@ -1,8 +1,8 @@
-import Button from "../src/components/ui/Button";
-import StatCard from "../src/components/ui/StatCard";
-import ChartCard from "../src/components/ui/ChartCard";
-import Card from "../src/components/ui/Card";
-import ProgressBar from "../src/components/ui/ProgressBar";
+import Button from "../components/ui/Button";
+import StatCard from "../components/ui/StatCard";
+import ChartCard from "../components/ui/ChartCard";
+import Card from "../components/ui/Card";
+import ProgressBar from "../components/ui/ProgressBar";
 import { righteous } from "./font";
 
 /**

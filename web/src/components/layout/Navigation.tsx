@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Search, Menu } from "lucide-react";
-import { righteous } from "../../../app/font";
+import { righteous } from "../../app/font";
 /**
  * Navigation links displayed in the top navigation bar
  * Routes to the main sections of the ApexF1 dashboard
