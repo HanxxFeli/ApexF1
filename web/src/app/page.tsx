@@ -4,6 +4,7 @@ import ChartCard from "../components/ui/ChartCard";
 import Card from "../components/ui/Card";
 import ProgressBar from "../components/ui/ProgressBar";
 import { righteous } from "./font";
+import DriverFormChart from "@/components/charts/DriverFormChart";
 
 /**
  * Home/Dashboard Page
@@ -97,7 +98,7 @@ export default function HomePage() {
             title="Driver Form (Last 10 Races)"
             subtitle="Rolling average finish position."
           >
-            <div className="mt-4 h-42.5 rounded-xl border border-white/5 bg-white/5" />
+            <DriverFormChart />
           </ChartCard>
 
           <ChartCard
@@ -105,7 +106,7 @@ export default function HomePage() {
             subtitle="Current season points by team."
           >
             {/* Placeholder chart area */}
-            <div className="mt-4 h-42.5 rounded-xl border border-white/5 bg-white/5" />
+            <DriverFormChart />
           </ChartCard>
         </section>
 
@@ -113,7 +114,7 @@ export default function HomePage() {
         <Card
           className="
             p-8 transition-all duration-300 ease-out
-            hover:-translate-y-[2px]
+            hover:-translate-y-0.5
           hover:border-red-500/30
             hover:shadow-[0_0_30px_rgba(239,68,68,0.18)]
           "
