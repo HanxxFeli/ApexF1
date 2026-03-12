@@ -33,7 +33,7 @@ def run_pipeline():
         sys.exit(1) # exit the program
 
     # Step 2 - Transform 
-    logger.info("[2/3] TRANSFORM]")
+    logger.info("[2/3] TRANSFORM")
     cleaned_dataframes = transform_all(raw_dataframes)
 
     # Step 3: Load 
