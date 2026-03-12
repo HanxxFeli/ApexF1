@@ -1,17 +1,31 @@
-import { clsx } from "clsx";
-import * as React from "react";
-
+/**
+ * Card Component
+ * 
+ * Purpose:
+ * - Provides a reusable container for content
+ * 
+ * Props:
+ * - children: content rendered inside the card
+ * - className: optional Tailwind classes for layout override
+ */
 export default function Card({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
+  children,
+  className = "",
+} : {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <div
-      className={clsx(
-        "rounded-2xl bg-surface border border-surface backdrop-blur-md shadow-[0_10px_30px_rgba(0,0,0,0.15)]",
-        className
-      )}
-      {...props}
-    />
+      className={`
+        rounded-2xl 
+        bg-[#1D1D27]/80 
+        border border-white/5 
+        shadow-[0_12px_30px_rgba(0,0,0,0.35)] 
+        ${className}
+      `}
+    >
+      { children }
+    </div>
   );
 }

@@ -1,27 +1,68 @@
-import Card from "./Card";
+import Card from "@/components/ui/Card";
 
-type Props = {
-  title: string;
-  value: string | number;
-  subtitle?: string;
-  highlight?: boolean;
+/**
+ * StatCard Component
+ * 
+ * Purpose:
+ * - Displays key dashboard metrics 
+ * 
+ * Features:
+ * - Reusable card layout 
+ * - Supports two display variants
+ * - Subtle hover animation and glow effect
+ * 
+ * Props:
+ * - label: metric title 
+ * - value: main stat or text value
+ * - helper: optional description
+ * - variant: styling of value
+ */
+type StatCardProps = {
+  label: string;
+  value: string;
+  helper?: string;
+  variant?: "number" | "text"; // number = 1149, text = Lando Norris
 };
 
-export default function StatCard({ title, value, subtitle, highlight }: Props) {
+export default function StatCard({
+  label,
+  value,
+  helper,
+  variant = "number",
+}: StatCardProps) {
+  const isText = variant === "text";
+
   return (
-    <Card className="p-5">
-      <p className="text-xs tracking-widest text-dim uppercase">{title}</p>
-      <div className="mt-3 flex items-end justify-between gap-4">
-        <p className="text-3xl font-semibold">
-          {typeof value === "number" ? value.toLocaleString() : value}
-        </p>
-        {highlight ? (
-          <span className="h-2 w-2 rounded-full bg-red-500 shadow-[0_0_18px_rgba(239,68,68,0.8)]" />
-        ) : null}
+    <Card
+      className="
+        h-27 px-7
+        flex flex-col items-center justify-center
+        rounded-[18px]
+        text-center
+        transition-all duration-200
+        hover:-translate-y-1
+        hover:shadow-[0_0_25px_rgba(239,68,68,0.18)]
+        hover:border-red-500/20
+      "
+    >
+      {/* Metric Label */}
+      <p className="text-[11px] text-white/35">{label}</p>
+
+      {/* Main Label */}
+      <div
+        className={
+          isText
+            ? "mt-2 text-[18px] font-semibold text-white leading-tight"
+            : "mt-2 text-[22px] font-semibold text-white leading-none"
+        }
+      >
+        {value}
       </div>
-      {subtitle ? (
-        <p className="mt-2 text-xs text-dim">{subtitle}</p>
-      ) : null}
+
+      {/* Optional Description */}
+      {helper && (
+        <p className="mt-2 text-[11px] text-white/30">{helper}</p>
+      )}
     </Card>
   );
 }

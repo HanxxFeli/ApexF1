@@ -1,15 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { clsx } from "clsx";
 import * as React from "react";
 
 type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  href?: string;
   variant?: "primary" | "secondary" | "ghost";
   size?: "sm" | "md" | "lg";
   loading?: boolean;
 };
 
 export default function Button({
+  href,
   variant = "primary",
   size = "md",
   loading = false,
@@ -24,10 +27,8 @@ export default function Button({
   const variants = {
     primary:
       "bg-red-600 hover:bg-red-500 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.06)]",
-    // Theme-safe: border stays red, text adapts to theme
     secondary:
       "bg-transparent border border-red-500/60 hover:border-red-400 text-[color:var(--foreground)] hover:text-[color:var(--foreground)]",
-    // Theme-safe: subtle surface hover and theme text
     ghost:
       "bg-transparent hover:bg-[color:var(--surface)] text-[color:var(--foreground)]",
   };
@@ -38,9 +39,19 @@ export default function Button({
     lg: "h-12 px-7 text-base",
   };
 
+  const classes = clsx(base, variants[variant], sizes[size], className);
+
+  if (href) {
+    return (
+      <Link href={href} className={classes}>
+        {children}
+      </Link>
+    );
+  }
+
   return (
     <button
-      className={clsx(base, variants[variant], sizes[size], className)}
+      className={classes}
       disabled={disabled || loading}
       {...props}
     >

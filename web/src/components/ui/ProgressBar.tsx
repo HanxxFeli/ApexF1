@@ -1,30 +1,39 @@
-import Card from "./Card";
-
-type Props = {
-  title: string;
-  label: string;
-  value: number; // 0-100
+type ProgressBarProps = {
+  value: number; // 0–100
 };
 
-export default function ProgressBar({ title, label, value }: Props) {
-  const v = Math.max(0, Math.min(100, value));
+/**
+ * ProgressBar Component
+ * 
+ * Purpose:
+ * - Visually represents a percentage value
+ * 
+ * Features:
+ * - Smooth animated width transition
+ * - Gradient color styling 
+ * - Glow effect
+ * 
+ * Props:
+ * - value: Percentage to fill the bar (0-100)
+ */
+export default function ProgressBar({ value }: ProgressBarProps) {
+  const safeValue = Math.max(0, Math.min(100, value));
 
   return (
-    <Card className="p-5">
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <p className="text-sm font-semibold">{title}</p>
-          <p className="mt-1 text-xs text-dim">{label}: {v}%</p>
-        </div>
-        <p className="text-2xl font-semibold">{v}%</p>
-      </div>
-
-      <div className="mt-4 h-2 rounded-full bg-white/10 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-red-700 via-red-500 to-red-400"
-          style={{ width: `${v}%` }}
-        />
-      </div>
-    </Card>
+    <div className="w-full h-3 bg-white/20 rounded-full overflow-hidden">
+      
+      {/* Filled progress indicator */}
+      <div
+        className="
+          h-full 
+          rounded-full 
+          bg-linear-to-r 
+          from-orange-500 via-red-500 to-red-600 
+          transition-all duration-500 
+          shadow-[0_0_8px_rgba(239,68,68,0.5)]
+        "
+        style={{ width: `${safeValue}%`}}
+      />
+    </div>
   );
 }
