@@ -35,20 +35,36 @@ export default function CalendarPage() {
     : null;
 
   return (
-    <main className="min-h-screen" style={{ background: "#060606" }}>
+    <div className="mx-auto max-w-300 px-12 py-16">
+
+      {/* Page Title */}
+      <h1 className="text-3xl font-semibold">Calendar</h1>
+
+      <p className="text-sm text-white/50 mt-2">
+        Browse the Formula 1 race schedule by season.
+      </p>
+
       <CalendarHero season={season} />
+
       {!isLoading && nextRace && <CountdownBanner race={nextRace} />}
-      <div>
-        <SeasonSelector season={season} onSeasonChange={setSeason} />
-        {isLoading ? (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "8rem 0" }}>
-            <div style={{ width: "32px", height: "32px", border: "2px solid #E10600", borderTopColor: "transparent", borderRadius: "50%", animation: "spin-ring 0.8s linear infinite", marginBottom: "1rem" }} />
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>LOADING SCHEDULE...</p>
-          </div>
-        ) : (
-          <RaceGrid races={races} season={season} currentYear={currentYear} />
-        )}
-      </div>
-    </main>
+
+      <SeasonSelector season={season} onSeasonChange={setSeason} />
+
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-32">
+          <div className="
+            w-8 h-8 rounded-full mb-4
+            border-2 border-red-500 border-t-transparent
+            animate-spin
+          " />
+          <p className="text-xs text-white/40 tracking-widest uppercase">
+            Loading Schedule...
+          </p>
+        </div>
+      ) : (
+        <RaceGrid races={races} season={season} currentYear={currentYear} />
+      )}
+
+    </div>
   );
 }
