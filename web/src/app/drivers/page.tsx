@@ -1,181 +1,191 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Card from "@/components/ui/Card";
 
-/**
- * Driver type definition
- * Mirrors structure that is expected from backend API
- */
+// Driver type mirrors the Supabase drivers table schema
+// driver_id is text in Supabase, not a number
 type Driver = {
-  driver_id: number;
-  forename: string;
-  surname: string;
+  driver_id: string;
+  given_name: string;
+  family_name: string;
   nationality?: string;
   code?: string;
+  dob?: string;
 };
 
-/**
- * Temp mock driver data 
- * Will be replaced once backend API endpoints are merged
- */
-const mockDrivers: Driver[] = [
-  { driver_id: 1, forename: "Max", surname: "Verstappen", nationality: "Dutch", code: "VER" },
-  { driver_id: 2, forename: "Lewis", surname: "Hamilton", nationality: "British", code: "HAM" },
-  { driver_id: 3, forename: "Charles", surname: "Leclerc", nationality: "Monégasque", code: "LEC" },
-  { driver_id: 4, forename: "Lando", surname: "Norris", nationality: "British", code: "NOR" },
-  { driver_id: 5, forename: "George", surname: "Russell", nationality: "British", code: "RUS" },
-  { driver_id: 6, forename: "Carlos", surname: "Sainz", nationality: "Spanish", code: "SAI" },
-  { driver_id: 7, forename: "Fernando", surname: "Alonso", nationality: "Spanish", code: "ALO" },
-  { driver_id: 8, forename: "Oscar", surname: "Piastri", nationality: "Australian", code: "PIA" },
-  { driver_id: 9, forename: "Sergio", surname: "Perez", nationality: "Mexican", code: "PER" },
-  { driver_id: 10, forename: "Pierre", surname: "Gasly", nationality: "French", code: "GAS" },
-];
-
-/*
-2026 Current F1 Grid
-Used for the simple frontend filter.
-*/
+// Used to determine if a driver is on the current 2026 F1 grid
 const CURRENT_GRID = [
-  "Alexander Albon",
-  "Fernando Alonso",
-  "Kimi Antonelli",
-  "Oliver Bearman",
-  "Gabriel Bortoleto",
-  "Valtteri Bottas",
-  "Franco Colapinto",
-  "Pierre Gasly",
-  "Isack Hadjar",
-  "Lewis Hamilton",
-  "Nico Hülkenberg",
-  "Liam Lawson",
-  "Charles Leclerc",
-  "Arvid Lindblad",
-  "Lando Norris",
-  "Esteban Ocon",
-  "Sergio Pérez",
-  "Oscar Piastri",
-  "George Russell",
-  "Carlos Sainz",
-  "Lance Stroll",
-  "Max Verstappen",
+  "Alexander Albon", "Fernando Alonso", "Kimi Antonelli", "Oliver Bearman",
+  "Gabriel Bortoleto", "Valtteri Bottas", "Franco Colapinto", "Pierre Gasly",
+  "Isack Hadjar", "Lewis Hamilton", "Nico Hülkenberg", "Liam Lawson",
+  "Charles Leclerc", "Arvid Lindblad", "Lando Norris", "Esteban Ocon",
+  "Sergio Pérez", "Oscar Piastri", "George Russell", "Carlos Sainz",
+  "Lance Stroll", "Max Verstappen",
 ];
 
 /**
  * DriversPage
- * 
- * Displays a searchable and filterable list of Formula 1 Drivers
- * Page supports:
- * - Search by driver name
- * - Filtering by current grid or past drivers
- * 
- * Is currently using mock data
+ *
+ * Fetches all drivers from /api/drivers and renders them as a
+ * searchable, filterable grid of cards. Each card navigates to
+ * the driver detail page at /drivers/[id].
  */
 export default function DriversPage() {
+  const router = useRouter();
 
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "current" | "past">("all");
 
-  // filters based on search input and selected filter
-  const filteredDrivers = mockDrivers.filter((driver) => {
+  // Fetch all drivers from the API on mount
+  useEffect(() => {
+    async function fetchDrivers() {
+      setIsLoading(true);
+      try {
+        const res = await fetch("/api/drivers");
+        const json = await res.json();
 
-    const fullName = `${driver.forename} ${driver.surname}`;
-    const matchesSearch =
-      fullName.toLowerCase().includes(search.toLowerCase());
+        if (!res.ok || !json.success) {
+          throw new Error(json.error || "Failed to fetch drivers");
+        }
 
+        setDrivers(json.data);
+      } catch (err: any) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchDrivers();
+  }, []);
+
+  // Apply search and current/past filter to the full drivers list
+  const filteredDrivers = drivers.filter((driver) => {
+    const fullName = `${driver.given_name} ${driver.family_name}`;
+    const matchesSearch = fullName.toLowerCase().includes(search.toLowerCase());
     const isCurrent = CURRENT_GRID.includes(fullName);
 
-    if (filter === "current") {
-      return matchesSearch && isCurrent;
-    }
-
-    if (filter === "past") {
-      return matchesSearch && !isCurrent;
-    }
-
+    if (filter === "current") return matchesSearch && isCurrent;
+    if (filter === "past") return matchesSearch && !isCurrent;
     return matchesSearch;
   });
 
   return (
     <div className="mx-auto max-w-300 px-12 py-16">
 
-      {/* Page Title */}
+      {/* Page header — matches calendar page style */}
       <h1 className="text-3xl font-semibold">Drivers</h1>
-
       <p className="text-sm text-white/50 mt-2">
         Explore current and historical Formula 1 drivers.
       </p>
 
-      {/* Search + Filter */}
-      <div className="mt-8 flex gap-4 flex-wrap">
+      {/* Search + filter controls */}
+      <div className="mt-8 flex gap-3 flex-wrap items-center">
 
-        {/* Driver search input */}
+        {/* Text search input */}
         <input
           type="text"
           placeholder="Search drivers..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="px-4 py-2 rounded-md bg-[#1D1D27] border border-white/10 text-sm focus:outline-none focus:border-red-500"
+          className="px-4 py-2 rounded-md bg-[#1D1D27] border border-white/10 text-sm placeholder:text-white/30 focus:outline-none focus:border-red-500/60 transition-colors w-52"
         />
 
-        {/* Driver filter dropdown */}
-        <select
-          value={filter}
-          onChange={(e) =>
-            setFilter(e.target.value as "all" | "current" | "past")
-          }
-          className="px-4 py-2 rounded-md bg-[#1D1D27] border border-white/10 text-sm"
-        >
-          <option value="all">All Drivers</option>
-          <option value="current">Current Grid</option>
-          <option value="past">Past Drivers</option>
-        </select>
-
-      </div>
-
-      {/* Result Count */}
-      <p className="text-xs text-white/40 mt-6">
-        {filteredDrivers.length} drivers found
-      </p>
-
-      {/* Driver Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-
-        {filteredDrivers.map((driver) => {
-
-          const fullName = `${driver.forename} ${driver.surname}`;
-
-          return (
-            <Card
-              key={driver.driver_id}
-              className="
-                p-6
-                transition-all duration-200
-                hover:-translate-y-1
-                hover:shadow-[0_0_25px_rgba(239,68,68,0.18)]
-                hover:border-red-500/20
-              "
+        {/* Segmented filter toggle: All / Current / Past */}
+        <div className="flex rounded-md border border-white/10 overflow-hidden text-sm">
+          {(["all", "current", "past"] as const).map((option) => (
+            <button
+              key={option}
+              onClick={() => setFilter(option)}
+              className={`px-4 py-2 capitalize transition-colors ${
+                filter === option
+                  ? "bg-red-500/20 text-red-400"
+                  : "text-white/40 hover:text-white/60 hover:bg-white/5"
+              }`}
             >
-
-              <p className="text-sm text-white/40">
-                {driver.nationality ?? "Unknown"}
-              </p>
-
-              <h3 className="text-lg font-semibold mt-1">
-                {fullName}
-              </h3>
-
-              {driver.code && (
-                <p className="text-xs text-white/40 mt-1">
-                  Code: {driver.code}
-                </p>
-              )}
-
-            </Card>
-          );
-        })}
+              {option}
+            </button>
+          ))}
+        </div>
 
       </div>
+
+      {/* Loading spinner — matches CalendarPage loading style */}
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-32">
+          <div className="
+            w-8 h-8 rounded-full mb-4
+            border-2 border-red-500 border-t-transparent
+            animate-spin
+          " />
+          <p className="text-xs text-white/40 tracking-widest uppercase">
+            Loading Drivers...
+          </p>
+        </div>
+      ) : error ? (
+
+        /* Error state */
+        <p className="text-sm text-red-400 mt-10">Error: {error}</p>
+
+      ) : (
+
+        /* Driver cards grid */
+        <>
+          {/* Result count */}
+          <p className="text-xs text-white/30 mt-6 mb-4">
+            {filteredDrivers.length} drivers found
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredDrivers.map((driver) => {
+              const fullName = `${driver.given_name} ${driver.family_name}`;
+              const isCurrent = CURRENT_GRID.includes(fullName);
+
+              return (
+                // Outer div handles click and key; Card handles styling
+                <div
+                  key={driver.driver_id}
+                  onClick={() => router.push(`/drivers/${driver.driver_id}`)}
+                  className="cursor-pointer"
+                >
+                  <Card className="relative p-6 group transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(239,68,68,0.18)] hover:border-red-500/20">
+
+                    {/* Current grid badge */}
+                    {isCurrent && (
+                      <span className="absolute top-4 right-4 text-[10px] uppercase tracking-widest text-red-400/70 font-medium">
+                        2026 Grid
+                      </span>
+                    )}
+
+                    {/* Nationality */}
+                    <p className="text-sm text-white/40">
+                      {driver.nationality ?? "Unknown"}
+                    </p>
+
+                    {/* Driver full name */}
+                    <h3 className="text-lg font-semibold mt-1 group-hover:text-white transition-colors">
+                      {fullName}
+                    </h3>
+
+                    {/* Driver code e.g. VER, HAM */}
+                    {driver.code && (
+                      <p className="text-xs text-white/30 mt-1 font-mono">
+                        {driver.code}
+                      </p>
+                    )}
+
+                  </Card>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
 
     </div>
   );

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getConstructors } from '@/src/lib/db'
+import { getConstructors } from '@/lib/db'
 
 export async function GET() {
   try {

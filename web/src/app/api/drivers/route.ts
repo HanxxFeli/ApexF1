@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getDrivers } from '@/src/lib/db'
+import { getDrivers } from '@/lib/db'
 
 export async function GET() {
   try {
