@@ -1,22 +1,23 @@
-import { NextResponse } from 'next/server'
-import { getDrivers } from '@/lib/db'
+import { NextResponse } from "next/server";
+import { getDrivers } from "@/lib/api";
 
 export async function GET() {
   try {
-    const drivers = await getDrivers()
-    
+    const drivers = await getDrivers();
+
     return NextResponse.json({
       success: true,
       data: drivers,
-      count: drivers.length
-    })
+    });
   } catch (error: any) {
+    console.error("GET /api/drivers error:", error);
+
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Failed to fetch drivers'
+        error: error?.message || "Failed to fetch drivers",
       },
       { status: 500 }
-    )
+    );
   }
 }

@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Card from "@/components/ui/Card";
 
-// Full driver detail type — mirrors Supabase drivers table
+// Full driver detail type — mirrors API response
 type Driver = {
-  driver_id: number;
-  given_name: string;
-  family_name: string;
+  driverId: string;
+  givenName: string;
+  familyName: string;
   nationality?: string;
   code?: string;
-  dob?: string;
+  dateOfBirth?: string;
 };
 
 /**
@@ -21,7 +21,8 @@ type Driver = {
  * displays their details. Navigates back to /drivers on back button.
  */
 export default function DriverDetailPage() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params?.id as string;
   const router = useRouter();
 
   const [driver, setDriver] = useState<Driver | null>(null);
@@ -75,14 +76,10 @@ export default function DriverDetailPage() {
         All Drivers
       </button>
 
-      {/* Loading spinner — matches CalendarPage loading style */}
+      {/* Loading */}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-32">
-          <div className="
-            w-8 h-8 rounded-full mb-4
-            border-2 border-red-500 border-t-transparent
-            animate-spin
-          " />
+          <div className="w-8 h-8 rounded-full mb-4 border-2 border-red-500 border-t-transparent animate-spin" />
           <p className="text-xs text-white/40 tracking-widest uppercase">
             Loading Driver...
           </p>
@@ -96,8 +93,8 @@ export default function DriverDetailPage() {
         <>
           {/* Page header */}
           <h1 className="text-3xl font-semibold">
-            {driver.given_name}{" "}
-            <span className="text-white/50">{driver.family_name}</span>
+            {driver.givenName}{" "}
+            <span className="text-white/50">{driver.familyName}</span>
           </h1>
 
           <p className="text-sm text-white/50 mt-2">
@@ -107,7 +104,7 @@ export default function DriverDetailPage() {
             )}
           </p>
 
-          {/* Detail stat cards */}
+          {/* Detail cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
 
             {/* Nationality */}
@@ -125,7 +122,9 @@ export default function DriverDetailPage() {
               <p className="text-xs text-white/30 uppercase tracking-wider mb-2">
                 Date of Birth
               </p>
-              <p className="text-lg font-semibold">{formatDate(driver.dob)}</p>
+              <p className="text-lg font-semibold">
+                {formatDate(driver.dateOfBirth)}
+              </p>
             </Card>
 
             {/* Driver code */}

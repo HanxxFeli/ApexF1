@@ -4,15 +4,14 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Card from "@/components/ui/Card";
 
-// Driver type mirrors the Supabase drivers table schema
-// driver_id is text in Supabase, not a number
+// Driver type — matches Jolpica / Ergast API response
 type Driver = {
-  driver_id: string;
-  given_name: string;
-  family_name: string;
+  driverId: string;
+  givenName: string;
+  familyName: string;
   nationality?: string;
   code?: string;
-  dob?: string;
+  dateOfBirth?: string;
 };
 
 // Used to determine if a driver is on the current 2026 F1 grid
@@ -64,9 +63,9 @@ export default function DriversPage() {
     fetchDrivers();
   }, []);
 
-  // Apply search and current/past filter to the full drivers list
+  // Apply search + current/past filter to drivers list
   const filteredDrivers = drivers.filter((driver) => {
-    const fullName = `${driver.given_name} ${driver.family_name}`;
+    const fullName = `${driver.givenName} ${driver.familyName}`;
     const matchesSearch = fullName.toLowerCase().includes(search.toLowerCase());
     const isCurrent = CURRENT_GRID.includes(fullName);
 
@@ -78,7 +77,7 @@ export default function DriversPage() {
   return (
     <div className="mx-auto max-w-300 px-12 py-16">
 
-      {/* Page header — matches calendar page style */}
+      {/* Page header */}
       <h1 className="text-3xl font-semibold">Drivers</h1>
       <p className="text-sm text-white/50 mt-2">
         Explore current and historical Formula 1 drivers.
@@ -87,7 +86,7 @@ export default function DriversPage() {
       {/* Search + filter controls */}
       <div className="mt-8 flex gap-3 flex-wrap items-center">
 
-        {/* Text search input */}
+        {/* Search input */}
         <input
           type="text"
           placeholder="Search drivers..."
@@ -96,7 +95,7 @@ export default function DriversPage() {
           className="px-4 py-2 rounded-md bg-[#1D1D27] border border-white/10 text-sm placeholder:text-white/30 focus:outline-none focus:border-red-500/60 transition-colors w-52"
         />
 
-        {/* Segmented filter toggle: All / Current / Past */}
+        {/* Filter toggle */}
         <div className="flex rounded-md border border-white/10 overflow-hidden text-sm">
           {(["all", "current", "past"] as const).map((option) => (
             <button
@@ -115,14 +114,10 @@ export default function DriversPage() {
 
       </div>
 
-      {/* Loading spinner — matches CalendarPage loading style */}
+      {/* Loading */}
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-32">
-          <div className="
-            w-8 h-8 rounded-full mb-4
-            border-2 border-red-500 border-t-transparent
-            animate-spin
-          " />
+          <div className="w-8 h-8 rounded-full mb-4 border-2 border-red-500 border-t-transparent animate-spin" />
           <p className="text-xs text-white/40 tracking-widest uppercase">
             Loading Drivers...
           </p>
@@ -134,23 +129,22 @@ export default function DriversPage() {
 
       ) : (
 
-        /* Driver cards grid */
         <>
           {/* Result count */}
           <p className="text-xs text-white/30 mt-6 mb-4">
             {filteredDrivers.length} drivers found
           </p>
 
+          {/* Driver cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredDrivers.map((driver) => {
-              const fullName = `${driver.given_name} ${driver.family_name}`;
+              const fullName = `${driver.givenName} ${driver.familyName}`;
               const isCurrent = CURRENT_GRID.includes(fullName);
 
               return (
-                // Outer div handles click and key; Card handles styling
                 <div
-                  key={driver.driver_id}
-                  onClick={() => router.push(`/drivers/${driver.driver_id}`)}
+                  key={driver.driverId}
+                  onClick={() => router.push(`/drivers/${driver.driverId}`)}
                   className="cursor-pointer"
                 >
                   <Card className="relative p-6 group transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_0_25px_rgba(239,68,68,0.18)] hover:border-red-500/20">
@@ -167,12 +161,12 @@ export default function DriversPage() {
                       {driver.nationality ?? "Unknown"}
                     </p>
 
-                    {/* Driver full name */}
+                    {/* Full name */}
                     <h3 className="text-lg font-semibold mt-1 group-hover:text-white transition-colors">
                       {fullName}
                     </h3>
 
-                    {/* Driver code e.g. VER, HAM */}
+                    {/* Driver code */}
                     {driver.code && (
                       <p className="text-xs text-white/30 mt-1 font-mono">
                         {driver.code}
