@@ -12,6 +12,8 @@ type Driver = {
   nationality?: string;
   code?: string;
   dateOfBirth?: string;
+  permanentNumber?: string;
+  url?: string;
 };
 
 /**
@@ -35,6 +37,8 @@ export default function DriverDetailPage() {
 
     async function fetchDriver() {
       setIsLoading(true);
+      setError(null);
+
       try {
         const res = await fetch(`/api/drivers/${id}`);
         const json = await res.json();
@@ -104,8 +108,40 @@ export default function DriverDetailPage() {
             )}
           </p>
 
+          {/* Wikipedia link */}
+          {driver.url && (
+            <a
+              href={driver.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-4 text-sm text-red-400 hover:text-red-300 transition-colors"
+            >
+              View on Wikipedia →
+            </a>
+          )}
+
           {/* Detail cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+
+            {/* Permanent number */}
+            <Card className="p-6">
+              <p className="text-xs text-white/30 uppercase tracking-wider mb-2">
+                Number
+              </p>
+              <p className="text-3xl font-bold text-red-500">
+                #{driver.permanentNumber ?? "—"}
+              </p>
+            </Card>
+
+            {/* Given name */}
+            <Card className="p-6">
+              <p className="text-xs text-white/30 uppercase tracking-wider mb-2">
+                Given Name
+              </p>
+              <p className="text-lg font-semibold">
+                {driver.givenName ?? "—"}
+              </p>
+            </Card>
 
             {/* Nationality */}
             <Card className="p-6">
@@ -134,6 +170,16 @@ export default function DriverDetailPage() {
               </p>
               <p className="text-lg font-semibold font-mono">
                 {driver.code ?? "—"}
+              </p>
+            </Card>
+
+            {/* Driver ID */}
+            <Card className="p-6">
+              <p className="text-xs text-white/30 uppercase tracking-wider mb-2">
+                Driver ID
+              </p>
+              <p className="text-lg font-semibold font-mono">
+                {driver.driverId}
               </p>
             </Card>
 

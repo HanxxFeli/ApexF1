@@ -12,6 +12,8 @@ type Driver = {
   nationality?: string;
   code?: string;
   dateOfBirth?: string;
+  permanentNumber?: string;
+  url?: string;
 };
 
 // Used to determine if a driver is on the current 2026 F1 grid
