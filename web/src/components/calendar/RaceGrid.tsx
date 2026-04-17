@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+// import useCountdown from "./CountdownBanner"; // Reuse the countdown hook from the banner
 
 interface RaceGridProps {
   races: any[];
@@ -65,8 +66,8 @@ function RaceCard({ race, season, isNext, isPast }: { race: any; season: string;
       {/* round number watermark */}
       <span
         className="absolute top-3 right-4 text-white/[0.03] font-semibold leading-none pointer-events-none select-none text-8xl"
-        aria-hidden
-      >
+        arnia-hidden
+      >no\
         {race.round}
       </span>
 

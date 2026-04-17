@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getConstructor } from '@/lib/db'
+import { getRace, getRaceResults } from '@/lib/db'
 
 export async function GET(
   request: Request,
@@ -12,33 +12,38 @@ export async function GET(
       return NextResponse.json(
         {
           success: false,
-          error: 'Invalid constructor ID'
+          error: 'Invalid race ID'
         },
         { status: 400 }
       )
     }
     
-    const constructor = await getConstructor(id)
+    const race = await getRace(id)
     
-    if (!constructor) {
+    if (!race) {
       return NextResponse.json(
         {
           success: false,
-          error: 'Constructor not found'
+          error: 'Race not found'
         },
         { status: 404 }
       )
     }
     
+    const results = await getRaceResults(id)
+    
     return NextResponse.json({
       success: true,
-      data: constructor
+      data: {
+        race,
+        results
+      }
     })
   } catch (error: any) {
     return NextResponse.json(
       {
         success: false,
-        error: error.message || 'Failed to fetch constructor'
+        error: error.message || 'Failed to fetch race'
       },
       { status: 500 }
     )

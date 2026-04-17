@@ -5,7 +5,7 @@ export async function getDrivers() {
   const { data, error } = await supabase
     .from('drivers')
     .select('*')
-    .order('surname')
+    .order('family_name')
   
   if (error) {
     console.error('Error fetching drivers:', error)
@@ -14,13 +14,13 @@ export async function getDrivers() {
   return data
 }
 
-export async function getDriver(id: number) {
+export async function getDriver(id: string) {
   const { data, error } = await supabase
     .from('drivers')
     .select('*')
     .eq('driver_id', id)
     .single()
-  
+
   if (error) {
     console.error('Error fetching driver:', error)
     return null
@@ -110,8 +110,8 @@ export async function getRaceResults(raceId: number) {
     .select(`
       *,
       drivers (
-        forename,
-        surname,
+        given_name,
+        family_name,
         code
       ),
       constructors (

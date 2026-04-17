@@ -15,17 +15,72 @@ type Constructor = {
 
 // Temp mock constructor data used until backend integration
 const mockConstructors: Constructor[] = [
-  { constructor_id: 1, name: "Red Bull Racing", nationality: "Austrian", constructor_ref: "red_bull" },
-  { constructor_id: 2, name: "Ferrari", nationality: "Italian", constructor_ref: "ferrari" },
-  { constructor_id: 3, name: "Mercedes", nationality: "German", constructor_ref: "mercedes" },
-  { constructor_id: 4, name: "McLaren", nationality: "British", constructor_ref: "mclaren" },
-  { constructor_id: 5, name: "Aston Martin", nationality: "British", constructor_ref: "aston_martin" },
-  { constructor_id: 6, name: "Alpine", nationality: "French", constructor_ref: "alpine" },
-  { constructor_id: 7, name: "Williams", nationality: "British", constructor_ref: "williams" },
-  { constructor_id: 8, name: "Audi", nationality: "German", constructor_ref: "audi" },
-  { constructor_id: 9, name: "Visa Cash App RB", nationality: "Italian", constructor_ref: "rb" },
-  { constructor_id: 10, name: "Haas F1 Team", nationality: "American", constructor_ref: "haas" },
-  { constructor_id: 11, name: "Cadillac", nationality: "American", constructor_ref: "cadillac"},
+  {
+    constructor_id: 1,
+    name: "Red Bull Racing",
+    nationality: "Austrian",
+    constructor_ref: "red_bull",
+  },
+  {
+    constructor_id: 2,
+    name: "Ferrari",
+    nationality: "Italian",
+    constructor_ref: "ferrari",
+  },
+  {
+    constructor_id: 3,
+    name: "Mercedes",
+    nationality: "German",
+    constructor_ref: "mercedes",
+  },
+  {
+    constructor_id: 4,
+    name: "McLaren",
+    nationality: "British",
+    constructor_ref: "mclaren",
+  },
+  {
+    constructor_id: 5,
+    name: "Aston Martin",
+    nationality: "British",
+    constructor_ref: "aston_martin",
+  },
+  {
+    constructor_id: 6,
+    name: "Alpine",
+    nationality: "French",
+    constructor_ref: "alpine",
+  },
+  {
+    constructor_id: 7,
+    name: "Williams",
+    nationality: "British",
+    constructor_ref: "williams",
+  },
+  {
+    constructor_id: 8,
+    name: "Audi",
+    nationality: "German",
+    constructor_ref: "audi",
+  },
+  {
+    constructor_id: 9,
+    name: "Visa Cash App RB",
+    nationality: "Italian",
+    constructor_ref: "rb",
+  },
+  {
+    constructor_id: 10,
+    name: "Haas F1 Team",
+    nationality: "American",
+    constructor_ref: "haas",
+  },
+  {
+    constructor_id: 11,
+    name: "Cadillac",
+    nationality: "American",
+    constructor_ref: "cadillac",
+  },
 ];
 
 /**
@@ -48,13 +103,13 @@ const CURRENT_GRID = [
 
 /**
  * Constructors Page
- * 
+ *
  * - Displays a searchable and filterable list of Formula 1 constructors
  * - Uses mock data for now
  */
 export default function ConstructorsPage() {
-  const [ search, setSearch ] = useState("");
-  const [ filter, setFilter ] = useState<"all" | "current" | "past">("all");
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<"all" | "current" | "past">("all");
 
   /**
    * Filters constructors based on:
@@ -142,7 +197,9 @@ export default function ConstructorsPage() {
             </p>
 
             <div className="mt-4 inline-flex rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1 text-[11px] text-red-300">
-              {CURRENT_GRID.includes(constructor.name) ? "Current Grid" : "Past Team"}
+              {CURRENT_GRID.includes(constructor.name)
+                ? "Current Grid"
+                : "Past Team"}
             </div>
           </Card>
         ))}

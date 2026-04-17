@@ -26,12 +26,12 @@ export default function SeasonSelector({ season, onSeasonChange }: SeasonSelecto
         <p className="text-xs text-white/25 mt-0.5">Select a championship year</p>
       </div>
 
-      <div className="ml-auto min-w-[200px]">
+      <div className="ml-auto min-w-50">
         <Select value={season} onValueChange={onSeasonChange}>
           <SelectTrigger className="h-10 bg-[#1D1D27] border-white/10 text-sm text-white focus:ring-0 focus:ring-offset-0 rounded-md">
             <SelectValue placeholder="Select season" />
           </SelectTrigger>
-          <SelectContent className="bg-[#1D1D27] border-white/10 max-h-[360px]">
+          <SelectContent className="bg-[#1D1D27] border-white/10 max-h-90">
             {years.map((year) => (
               <SelectItem
                 key={year}
